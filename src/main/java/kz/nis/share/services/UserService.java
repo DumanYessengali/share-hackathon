@@ -80,7 +80,6 @@ public class UserService implements UserDetailsService {
         savedUser.setPassword(passwordEncoder.encode(jwtRequest.getPassword()));
         savedUser.setName(jwtRequest.getName());
         savedUser.setSurname(jwtRequest.getSurname());
-        savedUser.setMajor(jwtRequest.getMajor());
         Collection<Role> collection = new ArrayList<>();
         collection.add(roleRepository.findById(1L).get());
         savedUser.setRoles(collection);
