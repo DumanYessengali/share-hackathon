@@ -16,15 +16,7 @@ create table user_details
     birthday varchar(255),
     subject varchar(255),
     created_at date,
-    foreign key (user_id) references users(id)
-);
-
-create table user_education
-(
-    id BIGSERIAL not null primary key,
-    university_name VARCHAR(255),
-    major VARCHAR(255),
-    user_id bigint not null,
+    modified_date date,
     foreign key (user_id) references users(id)
 );
 
@@ -33,6 +25,21 @@ create table degree
     id BIGSERIAL not null primary key,
     title varchar(255)
 );
+
+insert into degree (title) values ('BACHELOR'), ('MASTER'), ('PHD');
+
+create table user_education
+(
+    id BIGSERIAL not null primary key,
+    university_name VARCHAR(255),
+    major VARCHAR(255),
+    user_id bigint not null,
+    degree_id bigint not null,
+    foreign key (user_id) references users(id),
+    foreign key (degree_id) references degree(id)
+);
+
+
 
 create table roles
 (
@@ -56,7 +63,7 @@ create table post
     title varchar(255) not null,
     content text not null,
     creator_id bigint not null,
-    created_at date not null
+    created_at date not null,
     foreign key (creator_id) references users(id)
 );
 
@@ -75,7 +82,7 @@ create table post_comments
     id BIGSERIAL not null primary key,
     user_id bigint not null,
     post_id bigint not null,
-    content varchar(500) not null,
+    content varchar(255) not null,
     created_at date not null,
     foreign key (user_id) references users(id),
     foreign key (post_id) references post(id)
