@@ -48,6 +48,7 @@ public class PostService {
             return new BodyResponse("Post does not exists", Response.Status.BAD_REQUEST, null);
         }
         if (post.get().getUser().getLogin().equals(username)) {
+            postRepository.delete(post.get());
             return new BodyResponse("Post successfully deleted", Response.Status.OK, null);
         }
         return new BodyResponse("Not enough permission", Response.Status.BAD_REQUEST, null);

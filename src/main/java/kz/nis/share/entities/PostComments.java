@@ -46,4 +46,10 @@ public class PostComments {
     //    foreign key (post_id) references post(id)
     //);
 
+    public PostComments(String postContent, User user, Post post, LocalDate createdAt) {
+        this.postContent = postContent;
+        this.user = user;
+        this.post = post;
+        this.createdAt = createdAt;
+    }
 }
