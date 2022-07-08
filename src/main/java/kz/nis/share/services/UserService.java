@@ -48,10 +48,9 @@ public class UserService implements UserDetailsService {
         return name + " " + surname;
     }
 
-    public User findUserBySurnameAndName(String surname, String name){
-        return   userRepository.findUserBySurnameAndName(surname, name);
+    public User findUserBySurnameAndName(String surname, String name) {
+        return userRepository.findUserBySurnameAndName(surname, name);
     }
-
 
 
     public void save(User user) {
@@ -71,13 +70,13 @@ public class UserService implements UserDetailsService {
     }
 
     public BodyResponse register(JwtRequest jwtRequest) {
-        Optional<User> user = userRepository.findUserByLogin(jwtRequest.getLogin());
+        Optional<User> user = userRepository.findUserByLogin(jwtRequest.getName() + "." + jwtRequest.getSurname());
         if (user.isPresent()) {
             return new BodyResponse("User exists", Response.Status.CONFLICT, null);
         }
 
         User savedUser = new User();
-        savedUser.setLogin(jwtRequest.getLogin());
+        savedUser.setLogin(jwtRequest.getName() + "." + jwtRequest.getSurname());
         savedUser.setPassword(passwordEncoder.encode(jwtRequest.getPassword()));
         savedUser.setName(jwtRequest.getName());
         savedUser.setSurname(jwtRequest.getSurname());

@@ -31,8 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().and().csrf().disable()
 
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/tournament/tourney/**").permitAll() //TODO
-                .antMatchers("/tournament/**").authenticated()
+//                .antMatchers(HttpMethod.GET,"/tournament/tourney/**").permitAll() //TODO
+//                .antMatchers("/tournament/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/user-details/**").permitAll()
+                .antMatchers("/user-details/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/post/**").permitAll()
+                .antMatchers("/post/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/h2-console/**").permitAll()
@@ -50,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -66,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "DELETE", "PUT"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

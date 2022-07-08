@@ -56,7 +56,7 @@ create table users_roles
     foreign key (role_id) references roles (id)
 
 );
-
+-- change there post to posts
 create table post
 (
     id BIGSERIAL not null primary key,

@@ -1,11 +1,15 @@
 package kz.nis.share.entities;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,11 +25,24 @@ public class Hashtag {
     @Column(name = "title")
     private String title;
 
-    @ManyToMany
-    @JoinTable(name = "post_hashtags",
-            joinColumns = @JoinColumn(name = "hashtag_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private List<Hashtag> hashtagList;
+    @Setter(AccessLevel.PRIVATE)
+    @ManyToMany(mappedBy = "hashtags")
+    private Set<Post> posts = new HashSet<>();
 
+    public Hashtag(String title) {
+        this.title = title;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hashtag hashtag = (Hashtag) o;
+        return Objects.equals(id, hashtag.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
