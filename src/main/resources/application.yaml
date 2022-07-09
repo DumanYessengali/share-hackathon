@@ -21,10 +21,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
-
-
-
+      temp:
+      use_jdbc_metadata_defaults: false
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 400MB
+      max-request-size: 600MB
   flyway:
     sslmode: required
     url: jdbc:postgresql://ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/d41e0911iev5hn
@@ -34,3 +38,6 @@ spring:
 
     enabled: true
     locations: classpath:db/migration
+
+
+
