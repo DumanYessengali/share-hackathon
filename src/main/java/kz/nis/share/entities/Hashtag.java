@@ -29,7 +29,11 @@ public class Hashtag {
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private List<Post> posts = new ArrayList<>();
 
-
-
-
+    @Override
+    public String toString() {
+        return "Hashtag{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

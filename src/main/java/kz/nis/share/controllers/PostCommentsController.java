@@ -18,8 +18,8 @@ import java.security.Principal;
 public class PostCommentsController {
     private final PostCommentsService postCommentsService;
 
-    @GetMapping
-    public ResponseEntity<?> getPostCommentaries(@RequestBody Long postId) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getPostCommentaries(@PathVariable Long postId) {
         return ResponseEntity.ok(postCommentsService.getPostCommentaries(postId));
     }
 
