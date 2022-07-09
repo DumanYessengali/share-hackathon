@@ -25,6 +25,7 @@ public class UserDetailController {
     @GetMapping
     public ResponseEntity<?> getUserDetail(Principal principal) {
         try {
+            System.out.println(principal.getName());
             return ResponseEntity.ok(userDetailService.getUserDetail(principal.getName()));
         } catch (UserNotFound e) {
             return ResponseEntity.badRequest().body("Cant find user");
