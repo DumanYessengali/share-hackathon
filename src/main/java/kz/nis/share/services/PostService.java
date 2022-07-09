@@ -1,6 +1,9 @@
 package kz.nis.share.services;
 
+import kz.nis.share.dtos.HashtagDto;
+import kz.nis.share.dtos.PostDto;
 import kz.nis.share.dtos.PostRequest;
+import kz.nis.share.dtos.UserDto;
 import kz.nis.share.entities.Hashtag;
 import kz.nis.share.entities.Post;
 import kz.nis.share.entities.User;
@@ -9,6 +12,7 @@ import kz.nis.share.repositories.PostRepository;
 import kz.nis.share.repositories.UserRepository;
 import kz.nis.share.responses.BodyResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,37 +51,40 @@ public class PostService {
             save.getHashtags().add(hs);
 
         }
-
-
-
-
-//
-//        List<Hashtag> hashtags = new ArrayList<>();
-//        for(String s : postRequest.getHashtags()) {
-//            Hashtag hashtag = new Hashtag();
-//            hashtag.setTitle(s);
-//            hashtags.add(hashtag);
-//            hashtagRepository.save(hashtag);
-//
-//            List<Post> posts = hashtag.getPosts();
-//            posts.add(post);
-//        }
-//
-//
-//        post.setHashtags(hashtags);
-//
-//
-//        postRepository.save(post);
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    @Transactional
+    public List<PostDto> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+        List<PostDto> postDtos = new ArrayList<>();
+        for (Post post : posts) {
+            PostDto postDto = fillPostDto(new PostDto(), post);
+            postDtos.add(postDto);
+        }
+        return postDtos;
     }
 
-
-    public List<Post> getAllMyPosts(String username) {
+    @Transactional
+    public List<PostDto> getAllMyPosts(String username) {
         User user = userRepository.findUserByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found by " + username));
-        return postRepository.findAllByUser(user);
+        List<Post> posts = postRepository.findAllByUser(user);
+        List<PostDto> postDtos = new ArrayList<>();
+        for (Post post : posts) {
+            PostDto postDto = fillPostDto(new PostDto(), post);
+            postDtos.add(postDto);
+        }
+        return postDtos;
+    }
+
+    @Transactional
+    public BodyResponse getPostById(Long postId) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isEmpty()) {
+            return new BodyResponse("Post does not exists", Response.Status.BAD_REQUEST, null);
+        }
+        PostDto postDto = fillPostDto(new PostDto(), post.get());
+
+        return new BodyResponse("Post by id: " + postDto.getId(), Response.Status.OK, postDto);
     }
 
     public BodyResponse deletePost(String username, Long postId) {
@@ -90,5 +97,30 @@ public class PostService {
             return new BodyResponse("Post successfully deleted", Response.Status.OK, null);
         }
         return new BodyResponse("Not enough permission", Response.Status.BAD_REQUEST, null);
+    }
+
+    public PostDto fillPostDto(PostDto postDto, Post post) {
+        postDto.setId(post.getId());
+        postDto.setPostContent(post.getPostContent());
+        postDto.setTitle(post.getTitle());
+        UserDto userDto = new UserDto();
+        userDto.setId(post.getUser().getId());
+        userDto.setLogin(post.getUser().getLogin());
+        userDto.setName(post.getUser().getName());
+        userDto.setSurname(post.getUser().getSurname());
+        userDto.setEmail(post.getUser().getEmail());
+        postDto.setUser(userDto);
+
+        List<HashtagDto> hashtagDtos = new ArrayList<>();
+        for (Hashtag hashtag : post.getHashtags()) {
+            HashtagDto hashtagDto = new HashtagDto();
+
+            hashtagDto.setId(hashtag.getId());
+            hashtagDto.setTitle(hashtag.getTitle());
+            hashtagDtos.add(hashtagDto);
+        }
+
+        postDto.setHashtags(hashtagDtos);
+        return postDto;
     }
 }

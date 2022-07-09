@@ -1,9 +1,6 @@
 package kz.nis.share.entities;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +10,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @Table(name = "posts")
 public class Post {
     @Id
@@ -38,7 +36,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<PostLikes> likes;
-//cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "post_hashtags",
             joinColumns = @JoinColumn(name = "post_id"),
