@@ -1,5 +1,6 @@
 package kz.nis.share.entities;
 
+import kz.nis.share.dtos.UserEducationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 @Getter
 @Setter
 @Table(name = "user_educations")
@@ -31,5 +33,11 @@ public class UserEducation {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public UserEducation (UserEducationDto userEducationDto, User user) {
+        this.universityName = userEducationDto.getUniversityName();
+        this.major = userEducationDto.getMajor();
+        this.degree = userEducationDto.getDegree();
+        this.user = user;
+    }
 
 }
