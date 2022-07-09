@@ -1,6 +1,7 @@
 package kz.nis.share.controllers;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import kz.nis.share.dtos.PostDto;
 import kz.nis.share.dtos.PostRequest;
 import kz.nis.share.entities.Post;
 import kz.nis.share.responses.BodyResponse;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@SecurityRequirement(name = "bearer")
+//@SecurityRequirement(name = "bearer")
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;
@@ -36,8 +37,17 @@ public class PostController {
         return ResponseEntity.ok(postService.getAllMyPosts(principal.getName()));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deletePost(Principal principal, @RequestParam("post_id") Long postId) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getPostById( @PathVariable Long postId) {
+        BodyResponse response = postService.getPostById(postId);
+        if (response.getStatusCode() != Response.Status.OK) {
+            return ResponseEntity.badRequest().body(response.getMessage());
+        }
+        return ResponseEntity.ok(response.getBody());
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> deletePost(Principal principal, @PathVariable Long postId) {
         BodyResponse response = postService.deletePost(principal.getName(), postId);
         if (response.getStatusCode() != Response.Status.OK) {
             return ResponseEntity.badRequest().body(response.getMessage());

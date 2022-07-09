@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/images")
 @RequiredArgsConstructor
 public class ImageController {
 
@@ -30,7 +30,7 @@ public class ImageController {
 	private FileNameHelper fileHelper = new FileNameHelper();
 
 
-	@GetMapping("/images")
+	@GetMapping
 	public ResponseEntity<List<ImageResponse>> getAllImageInfo() {
 
 		List<ImageResponse> imageResponses = imageService.findAllImageResponse();
@@ -40,7 +40,7 @@ public class ImageController {
 
 	@PostMapping("/upload")
 	public ImageResponse uploadSingleFile(@RequestParam("file") MultipartFile file) {
-		User a = userService.findUserByLogin("A");
+		User a = userService.findUserByLogin("timka.amanzhol");
 		Image image = Image.buildImage(file, fileHelper, a);
 		imageService.save(image);
 		return new ImageResponse(image);

@@ -3,7 +3,6 @@ package kz.nis.share.services;
 import kz.nis.share.dtos.JwtRequest;
 import kz.nis.share.entities.Role;
 import kz.nis.share.entities.User;
-import kz.nis.share.entities.UserDetail;
 import kz.nis.share.exceptions.UserException;
 import kz.nis.share.repositories.RoleRepository;
 import kz.nis.share.repositories.UserRepository;
@@ -21,7 +20,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,12 +39,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UserException("User not found"));
     }
 
-    public String getUserLogin(Long id) {
-        User user = userRepository.findById(id).get();
-        String name = user.getName();
-        String surname = user.getSurname();
-        return name + " " + surname;
-    }
 
     public User findUserBySurnameAndName(String surname, String name) {
         return userRepository.findUserBySurnameAndName(surname, name);
@@ -70,13 +62,14 @@ public class UserService implements UserDetailsService {
     }
 
     public BodyResponse register(JwtRequest jwtRequest) {
-        Optional<User> user = userRepository.findUserByLogin(jwtRequest.getName() + "." + jwtRequest.getSurname());
+        String login = jwtRequest.getName() + "." + jwtRequest.getSurname();
+        Optional<User> user = userRepository.findUserByLogin(login);
         if (user.isPresent()) {
             return new BodyResponse("User exists", Response.Status.CONFLICT, null);
         }
 
         User savedUser = new User();
-        savedUser.setLogin(jwtRequest.getName() + "." + jwtRequest.getSurname());
+        savedUser.setLogin(login);
         savedUser.setPassword(passwordEncoder.encode(jwtRequest.getPassword()));
         savedUser.setName(jwtRequest.getName());
         savedUser.setSurname(jwtRequest.getSurname());

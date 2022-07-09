@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -25,24 +22,18 @@ public class Hashtag {
     @Column(name = "title")
     private String title;
 
-    @Setter(AccessLevel.PRIVATE)
-    @ManyToMany(mappedBy = "hashtags")
-    private Set<Post> posts = new HashSet<>();
 
-    public Hashtag(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Hashtag hashtag = (Hashtag) o;
-        return Objects.equals(id, hashtag.id);
-    }
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "post_hashtags",
+            joinColumns = @JoinColumn(name = "hashtag_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private List<Post> posts = new ArrayList<>();
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public String toString() {
+        return "Hashtag{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

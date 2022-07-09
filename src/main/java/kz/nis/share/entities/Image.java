@@ -13,10 +13,8 @@ import javax.persistence.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
@@ -131,7 +129,9 @@ public class Image  {
 
 
         try {
-            image.setData(file.getBytes());
+
+
+           image.setData(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

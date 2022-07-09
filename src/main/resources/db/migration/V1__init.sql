@@ -33,6 +33,20 @@ create table images
     foreign key (user_id) references users(id)
 );
 
+create table articles
+(
+    id BIGSERIAL not null primary key,
+    user_id bigint not null,
+    data bytea,
+    file_name varchar(255),
+    file_type varchar(255),
+    size bigint,
+    uuid varchar(255),
+    created_date date,
+    foreign key (user_id) references users(id)
+);
+
+
 create table degree
 (
     id BIGSERIAL not null primary key,
@@ -72,14 +86,14 @@ create table users_roles
 
 );
 -- change there post to posts
-create table post
+create table posts
 (
     id BIGSERIAL not null primary key,
     title varchar(255) not null,
     content text not null,
-    creator_id bigint not null,
+    user_id bigint not null,
     created_at date not null,
-    foreign key (creator_id) references users(id)
+    foreign key (user_id) references users(id)
 );
 
 create table liked_post
@@ -89,7 +103,7 @@ create table liked_post
     post_id bigint not null,
     liked integer not null,
     foreign key (user_id) references users(id),
-    foreign key (post_id) references post(id)
+    foreign key (post_id) references posts(id)
 );
 
 create table post_comments
@@ -100,7 +114,7 @@ create table post_comments
     content varchar(255) not null,
     created_at date not null,
     foreign key (user_id) references users(id),
-    foreign key (post_id) references post(id)
+    foreign key (post_id) references posts(id)
 );
 
 create table hashtags
@@ -114,8 +128,8 @@ create table post_hashtags
     post_id bigint not null,
     hashtag_id bigint not null,
     primary key (post_id, hashtag_id),
-    foreign key (post_id) references users (id),
-    foreign key (hashtag_id) references roles (id)
+    foreign key (post_id) references posts (id),
+    foreign key (hashtag_id) references hashtags (id)
 );
 
 

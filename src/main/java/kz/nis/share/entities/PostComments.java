@@ -35,21 +35,14 @@ public class PostComments {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    //create table post_comments
-    //(
-    //    id BIGSERIAL not null primary key,
-    //    user_id bigint not null,
-    //    post_id bigint not null,
-    //    content varchar(500) not null,
-    //    created_at date not null,
-    //    foreign key (user_id) references users(id),
-    //    foreign key (post_id) references post(id)
-    //);
-
-    public PostComments(String postContent, User user, Post post, LocalDate createdAt) {
-        this.postContent = postContent;
-        this.user = user;
-        this.post = post;
-        this.createdAt = createdAt;
+    @Override
+    public String toString() {
+        return "PostComments{" +
+                "id=" + id +
+                ", postContent='" + postContent + '\'' +
+                ", user=" + user +
+                ", post=" + post +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

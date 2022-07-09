@@ -1,6 +1,6 @@
 package kz.nis.share.controllers;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import kz.nis.share.dtos.CommentRequest;
 import kz.nis.share.responses.BodyResponse;
 import kz.nis.share.services.PostCommentsService;
@@ -13,13 +13,13 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@SecurityRequirement(name = "bearer")
+//@SecurityRequirement(name = "bearer")
 @RequestMapping("/post/comment")
 public class PostCommentsController {
     private final PostCommentsService postCommentsService;
 
-    @GetMapping
-    public ResponseEntity<?> getPostCommentaries(@RequestBody Long postId) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getPostCommentaries(@PathVariable Long postId) {
         return ResponseEntity.ok(postCommentsService.getPostCommentaries(postId));
     }
 
