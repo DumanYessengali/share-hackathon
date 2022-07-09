@@ -2,10 +2,7 @@ package kz.nis.share.dtos;
 
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class LoginRequest {
     private String login;
     private String password;

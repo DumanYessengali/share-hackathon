@@ -38,42 +38,25 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<PostLikes> likes;
-
-    @Setter(AccessLevel.PRIVATE)
+//cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "post_hashtags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
-    private Set<Hashtag> hashtags = new HashSet<>();
+    private List<Hashtag> hashtags = new ArrayList<>();
 
     public void addHashtag(Hashtag hashtag) {
         this.getHashtags().add(hashtag);
         hashtag.getPosts().add(this);
     }
 
-    public void removeBook(Hashtag hashtag) {
+    public void removeHashtag(Hashtag hashtag) {
         this.getHashtags().remove(hashtag);
         hashtag.getPosts().remove(this);
     }
 
 
-    public Post(String title, String postContent, User user, LocalDate createdAt) {
-        this.title = title;
-        this.postContent = postContent;
-        this.user = user;
-        this.createdAt = createdAt;
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return Objects.equals(id, post.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+
 }

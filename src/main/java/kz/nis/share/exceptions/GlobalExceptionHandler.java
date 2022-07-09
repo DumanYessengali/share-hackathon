@@ -14,9 +14,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ResponseBody
     @ExceptionHandler(UserException.class)
-    public ResponseEntity<ExceptionMessage> userException(UserException ex) {
+    public ResponseEntity<ExceptionMessage> userException1(UserException ex) {
         return new ResponseEntity<>(new ExceptionMessage(ex.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
+
+    @ResponseBody
+    @ExceptionHandler(UserDetailNotFound.class)
+    public ResponseEntity<ExceptionMessage> userException2(UserDetailNotFound ex) {
+        return new ResponseEntity<>(new ExceptionMessage(ex.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
+
+
+
 
 
 }

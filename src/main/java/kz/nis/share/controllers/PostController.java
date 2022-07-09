@@ -1,6 +1,6 @@
 package kz.nis.share.controllers;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import kz.nis.share.dtos.PostRequest;
 import kz.nis.share.entities.Post;
 import kz.nis.share.responses.BodyResponse;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@SecurityRequirement(name = "bearer")
+//@SecurityRequirement(name = "bearer")
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;

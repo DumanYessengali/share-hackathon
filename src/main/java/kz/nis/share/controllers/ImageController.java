@@ -40,7 +40,7 @@ public class ImageController {
 
 	@PostMapping("/upload")
 	public ImageResponse uploadSingleFile(@RequestParam("file") MultipartFile file) {
-		User a = userService.findUserByLogin("A");
+		User a = userService.findUserByLogin("timka.amanzhol");
 		Image image = Image.buildImage(file, fileHelper, a);
 		imageService.save(image);
 		return new ImageResponse(image);
