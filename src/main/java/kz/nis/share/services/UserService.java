@@ -3,6 +3,7 @@ package kz.nis.share.services;
 import kz.nis.share.dtos.JwtRequest;
 import kz.nis.share.entities.Role;
 import kz.nis.share.entities.User;
+import kz.nis.share.entities.UserDetail;
 import kz.nis.share.exceptions.UserException;
 import kz.nis.share.repositories.RoleRepository;
 import kz.nis.share.repositories.UserRepository;
@@ -80,6 +81,7 @@ public class UserService implements UserDetailsService {
         savedUser.setPassword(passwordEncoder.encode(jwtRequest.getPassword()));
         savedUser.setName(jwtRequest.getName());
         savedUser.setSurname(jwtRequest.getSurname());
+        savedUser.setEmail(jwtRequest.getEmail());
         Collection<Role> collection = new ArrayList<>();
         collection.add(roleRepository.findById(1L).get());
         savedUser.setRoles(collection);
