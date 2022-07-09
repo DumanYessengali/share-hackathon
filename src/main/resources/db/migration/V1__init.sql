@@ -33,6 +33,20 @@ create table images
     foreign key (user_id) references users(id)
 );
 
+create table articles
+(
+    id BIGSERIAL not null primary key,
+    user_id bigint not null,
+    data bytea,
+    file_name varchar(255),
+    file_type varchar(255),
+    size bigint,
+    uuid varchar(255),
+    created_date date,
+    foreign key (user_id) references users(id)
+);
+
+
 create table degree
 (
     id BIGSERIAL not null primary key,
