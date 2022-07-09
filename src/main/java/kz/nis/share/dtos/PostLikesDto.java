@@ -1,5 +1,6 @@
 package kz.nis.share.dtos;
 
+import kz.nis.share.entities.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,8 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDto {
+public class PostLikesDto {
     private Long id;
-    private String name;
-    private String surname;
+    private UserDto user;
+    private Integer liked;
 }

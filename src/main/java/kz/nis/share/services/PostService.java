@@ -44,7 +44,6 @@ public class PostService {
         post.setUser(user);
         post.setCreatedAt(LocalDate.now());
         Post save = postRepository.save(post);
-        System.out.println("giii");
         for (String s : postRequest.getHashtags()) {
             Hashtag h = new Hashtag();
             h.setTitle(s);
@@ -105,10 +104,12 @@ public class PostService {
         postDto.setPostContent(post.getPostContent());
         postDto.setTitle(post.getTitle());
         postDto.setCreatedAt(post.getCreatedAt());
+        postDto.setPostLikes(post.getLikes().size());
 
         UserDto userDto = new UserDto();
         userDto.setId(post.getUser().getId());
-        userDto.setLogin(post.getUser().getLogin());
+        userDto.setName(post.getUser().getName());
+        userDto.setSurname(post.getUser().getSurname());
         postDto.setUser(userDto);
 
         List<PostCommentsDto> postCommentsDtos = new ArrayList<>();
@@ -120,7 +121,8 @@ public class PostService {
             postCommentsDto.setPostCommentId(postComments.getId());
             UserDto udto = new UserDto();
             udto.setId(postComments.getUser().getId());
-            udto.setLogin(postComments.getUser().getLogin());
+            udto.setName(post.getUser().getName());
+            udto.setSurname(post.getUser().getSurname());
             postCommentsDto.setUser(udto);
             postCommentsDtos.add(postCommentsDto);
         }

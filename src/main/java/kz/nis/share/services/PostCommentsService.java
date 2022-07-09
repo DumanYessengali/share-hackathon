@@ -30,7 +30,6 @@ public class PostCommentsService {
     @Transactional
     public List<PostCommentsDto> getPostCommentaries(Long postId) {
         List<PostComments> comments = postCommentRepository.findAllByPost(postRepository.findById(postId).get());
-        System.out.println(comments);
         List<PostCommentsDto> postCommentsDtos = new ArrayList<>();
         for (PostComments postComment : comments) {
             PostCommentsDto postCommentsDto = fillPostCommentsDto(new PostCommentsDto(), postComment);
@@ -74,7 +73,8 @@ public class PostCommentsService {
 
         UserDto userDto = new UserDto();
         userDto.setId(postComment.getUser().getId());
-        userDto.setLogin(postComment.getUser().getLogin());
+        userDto.setName(postComment.getUser().getName());
+        userDto.setSurname(postComment.getUser().getSurname());
 
         postCommentsDto.setUser(userDto);
         return postCommentsDto;
