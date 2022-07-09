@@ -1,13 +1,12 @@
 package kz.nis.share.services;
 
-import kz.nis.share.dtos.HashtagDto;
-import kz.nis.share.dtos.PostDto;
-import kz.nis.share.dtos.PostRequest;
-import kz.nis.share.dtos.UserDto;
+import kz.nis.share.dtos.*;
 import kz.nis.share.entities.Hashtag;
 import kz.nis.share.entities.Post;
+import kz.nis.share.entities.PostComments;
 import kz.nis.share.entities.User;
 import kz.nis.share.repositories.HashtagRepository;
+import kz.nis.share.repositories.PostCommentsRepository;
 import kz.nis.share.repositories.PostRepository;
 import kz.nis.share.repositories.UserRepository;
 import kz.nis.share.responses.BodyResponse;
@@ -32,6 +31,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final HashtagRepository hashtagRepository;
+
+    private final PostCommentsRepository postCommentRepository;
 
 
     @Transactional
@@ -103,13 +104,27 @@ public class PostService {
         postDto.setId(post.getId());
         postDto.setPostContent(post.getPostContent());
         postDto.setTitle(post.getTitle());
+        postDto.setCreatedAt(post.getCreatedAt());
+
         UserDto userDto = new UserDto();
         userDto.setId(post.getUser().getId());
         userDto.setLogin(post.getUser().getLogin());
-        userDto.setName(post.getUser().getName());
-        userDto.setSurname(post.getUser().getSurname());
-        userDto.setEmail(post.getUser().getEmail());
         postDto.setUser(userDto);
+
+        List<PostCommentsDto> postCommentsDtos = new ArrayList<>();
+        for (PostComments postComments : post.getComments()) {
+            PostCommentsDto postCommentsDto = new PostCommentsDto();
+            postCommentsDto.setPostId(postComments.getPost().getId());
+            postCommentsDto.setCreatedAt(postComments.getCreatedAt());
+            postCommentsDto.setComment(postComments.getPostContent());
+            postCommentsDto.setPostCommentId(postComments.getId());
+            UserDto udto = new UserDto();
+            udto.setId(postComments.getUser().getId());
+            udto.setLogin(postComments.getUser().getLogin());
+            postCommentsDto.setUser(udto);
+            postCommentsDtos.add(postCommentsDto);
+        }
+        postDto.setPostComments(postCommentsDtos);
 
         List<HashtagDto> hashtagDtos = new ArrayList<>();
         for (Hashtag hashtag : post.getHashtags()) {

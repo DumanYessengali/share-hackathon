@@ -17,6 +17,7 @@ public class PostDto {
     private String title;
     private String postContent;
     private UserDto user;
+    private List<PostCommentsDto> postComments;
     private LocalDate createdAt;
     private List<HashtagDto> hashtags;
 }
