@@ -1,27 +1,29 @@
 package kz.nis.share.entities;
 
 import kz.nis.share.utils.FileNameHelper;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
-
 @Getter
 @Setter
 @Entity
-@Table(name = "images")
-public class Image  {
+@Table(name = "post_images")
+public class PostImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,16 +50,16 @@ public class Image  {
     private byte[] data;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @Transient
-    public static Image build() {
+    public static PostImage build() {
         String uuid = UUID.randomUUID().toString();
-        Image image = new Image();
-        image.setUuid(uuid);
-        image.setCreatedDate(LocalDate.now());
-        return image;
+        PostImage postImage = new PostImage();
+        postImage.setUuid(uuid);
+        postImage.setCreatedDate(LocalDate.now());
+        return postImage;
     }
 
     @Transient
@@ -66,6 +68,26 @@ public class Image  {
         setSize(file.getSize());
     }
 
+
+    @Transient
+    public static PostImage buildImage(MultipartFile file, FileNameHelper helper, Post post) {
+        String fileName = helper.generateDisplayName(file.getOriginalFilename());
+
+        PostImage postImage = PostImage.build();
+        postImage.setFileName(fileName);
+        postImage.setFiles(file);
+        postImage.setPost(post);
+
+
+        try {
+
+
+            postImage.setData(file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return postImage;
+    }
 
     @Transient
     public byte[] scale(int width, int height) throws Exception {
@@ -100,44 +122,24 @@ public class Image  {
 
 
     @Transient
-    public static Image defaultImage() throws Exception {
+    public static PostImage defaultImage() throws Exception {
         InputStream is = getResourceFileAsInputStream("notfound.jpg");
         String fileType = "image/jpeg";
         byte[] bdata = FileCopyUtils.copyToByteArray(is);
-        Image image = new Image(null, fileType, 0, null, null, bdata);
+        PostImage image = new PostImage(null, fileType, 0, null, null, bdata);
         return image;
     }
 
 
     @Transient
-    public static Image defaultImage(int width, int height) throws Exception {
-        Image defaultImage = defaultImage();
+    public static PostImage defaultImage(int width, int height) throws Exception {
+        PostImage defaultImage = defaultImage();
         defaultImage.scale(width, height);
         return defaultImage;
     }
 
 
-    @Transient
-    public static Image buildImage(MultipartFile file, FileNameHelper helper, User user) {
-        String fileName = helper.generateDisplayName(file.getOriginalFilename());
-
-        Image image = Image.build();
-        image.setFileName(fileName);
-        image.setFiles(file);
-        image.setUser(user);
-
-
-        try {
-
-
-           image.setData(file.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
-
-    public Image(String fileName, String fileType, long size, String uuid, LocalDate createdDate, byte[] data) {
+    public PostImage(String fileName, String fileType, long size, String uuid, LocalDate createdDate, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.size = size;
@@ -146,6 +148,6 @@ public class Image  {
         this.data = data;
     }
 
-    public Image() {
+    public PostImage() {
     }
 }

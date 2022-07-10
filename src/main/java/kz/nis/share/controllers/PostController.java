@@ -1,6 +1,7 @@
 package kz.nis.share.controllers;
 
 
+import kz.nis.share.dtos.PostDto;
 import kz.nis.share.dtos.PostRequest;
 import kz.nis.share.entities.Post;
 import kz.nis.share.responses.BodyResponse;
@@ -8,6 +9,7 @@ import kz.nis.share.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.core.Response;
 import java.security.Principal;
@@ -36,8 +38,17 @@ public class PostController {
         return ResponseEntity.ok(postService.getAllMyPosts(principal.getName()));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deletePost(Principal principal, @RequestParam("post_id") Long postId) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getPostById( @PathVariable Long postId) {
+        BodyResponse response = postService.getPostById(postId);
+        if (response.getStatusCode() != Response.Status.OK) {
+            return ResponseEntity.badRequest().body(response.getMessage());
+        }
+        return ResponseEntity.ok(response.getBody());
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> deletePost(Principal principal, @PathVariable Long postId) {
         BodyResponse response = postService.deletePost(principal.getName(), postId);
         if (response.getStatusCode() != Response.Status.OK) {
             return ResponseEntity.badRequest().body(response.getMessage());

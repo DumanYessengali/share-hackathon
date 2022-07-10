@@ -31,12 +31,9 @@ public class AuthController {
     public ResponseEntity<?> createAuthToken(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword());
-            System.out.println(1.1);
 
             authenticationManager.authenticate(authentication);
-            System.out.println(1);
         } catch (BadCredentialsException e) {
-            System.out.println(2);
             return new ResponseEntity<>(new ResponseMessage("Incorrect username or password", HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
         }
 

@@ -6,43 +6,33 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "post_comments")
+@Table(name = "comment_lessons")
 @NoArgsConstructor
-public class PostComments {
+public class CommentLesson {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Column(name = "content")
-    private String postContent;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
 
 
     @Column(name = "created_at")
     private LocalDate createdAt;
-
-    @Override
-    public String toString() {
-        return "PostComments{" +
-                "id=" + id +
-                ", postContent='" + postContent + '\'' +
-                ", user=" + user +
-                ", post=" + post +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
+
+

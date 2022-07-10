@@ -2,6 +2,8 @@ package kz.nis.share.entities;
 
 import kz.nis.share.utils.FileNameHelper;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "articles")
 public class Article {
@@ -34,6 +37,9 @@ public class Article {
 
     @Column(name = "uuid")
     private String uuid;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "created_date")
     private LocalDate createdDate;
@@ -69,13 +75,14 @@ public class Article {
 
 
     @Transient
-    public static Article buildArticle(MultipartFile file, FileNameHelper helper, User user) {
+    public static Article buildArticle(MultipartFile file, FileNameHelper helper, User user, String title) {
         String fileName = helper.generateDisplayName(file.getOriginalFilename());
 
         Article article = Article.build();
         article.setFileName(fileName);
         article.setFiles(file);
         article.setUser(user);
+        article.setTitle(title);
 
 
         try {

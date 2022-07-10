@@ -27,6 +27,10 @@ public class ArticleService {
         return this.articleRepository.findByFileName(fileName);
     }
 
+    public Article findByFileTitle(String title) {
+        return this.articleRepository.findByTitleContaining(title);
+    }
+
 
     public Article findByUuid(String uuid) {
         return this.articleRepository.findByUuid(uuid);
