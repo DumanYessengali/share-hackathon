@@ -7,7 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
+import kz.nis.share.entities.UserEducation;
 
 @Entity
 @Getter
@@ -47,15 +47,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
+    @OneToOne(mappedBy = "user")
+    private UserDetail userDetail;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserEducation> userEducationList;
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return String.format("%d %s %s %s", id, login, name, email);
     }
 }
