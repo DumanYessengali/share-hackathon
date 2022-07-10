@@ -15,6 +15,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Article findByFileName(String fileName);
 
+
+    Article findByTitleContaining(String title);
+
     Article findByUuid(String uuid);
 
     @Query(value = "select new kz.nis.share.dtos.ArticleResponse(a.uuid, a.fileName, a.fileType, a.size) from Article a")

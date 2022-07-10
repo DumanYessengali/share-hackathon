@@ -1,20 +1,19 @@
 package kz.nis.share.services;
 
 import kz.nis.share.dtos.*;
-import kz.nis.share.entities.Hashtag;
-import kz.nis.share.entities.Post;
-import kz.nis.share.entities.PostComments;
-import kz.nis.share.entities.User;
+import kz.nis.share.entities.*;
 import kz.nis.share.repositories.HashtagRepository;
 import kz.nis.share.repositories.PostCommentsRepository;
 import kz.nis.share.repositories.PostRepository;
 import kz.nis.share.repositories.UserRepository;
 import kz.nis.share.responses.BodyResponse;
+import kz.nis.share.utils.FileNameHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
@@ -33,6 +32,8 @@ public class PostService {
     private final HashtagRepository hashtagRepository;
 
     private final PostCommentsRepository postCommentRepository;
+    private final PostImageService postImageService;
+
 
 
     @Transactional

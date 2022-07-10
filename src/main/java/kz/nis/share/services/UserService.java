@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
         savedUser.setSurname(jwtRequest.getSurname());
         savedUser.setEmail(jwtRequest.getEmail());
         Collection<Role> collection = new ArrayList<>();
-        collection.add(roleRepository.findById(1L).get());
+        collection.add(roleRepository.findById(2L).get());
         savedUser.setRoles(collection);
 
         return new BodyResponse("User created", Response.Status.OK, userRepository.save(savedUser));
