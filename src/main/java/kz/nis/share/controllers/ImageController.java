@@ -24,77 +24,92 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageController {
 
-	private final UserService userService;
-	private final ImageService imageService;
+    private final UserService userService;
+    private final ImageService imageService;
 
-	private FileNameHelper fileHelper = new FileNameHelper();
-
-
-	@GetMapping
-	public ResponseEntity<List<ImageResponse>> getAllImageInfo() {
-
-		List<ImageResponse> imageResponses = imageService.findAllImageResponse();
-		return ResponseEntity.ok().body(imageResponses);
-	}
+    private FileNameHelper fileHelper = new FileNameHelper();
 
 
-	@PostMapping("/upload")
-	public ImageResponse uploadSingleFile(@RequestParam("file") MultipartFile file) {
-		User a = userService.findUserByLogin("timka.amanzhol");
-		Image image = Image.buildImage(file, fileHelper, a);
-		imageService.save(image);
-		return new ImageResponse(image);
-	}
+    @GetMapping
+    public ResponseEntity<List<ImageResponse>> getAllImageInfo() {
+
+        List<ImageResponse> imageResponses = imageService.findAllImageResponse();
+        return ResponseEntity.ok().body(imageResponses);
+    }
 
 
-	@PostMapping("/uploads")
-	public List<ImageResponse> uploadMultiFiles(@RequestParam("files") MultipartFile[] files) {
-		return Arrays.asList(files).stream().map(file -> uploadSingleFile(file)).collect(Collectors.toList());
-	}
+    @PostMapping("/upload")
+    public ImageResponse uploadSingleFile(@RequestParam("file") MultipartFile file) {
+        User a = userService.findUserByLogin("string.string");
+        Image image = Image.buildImage(file, fileHelper, a);
+        imageService.save(image);
+        return new ImageResponse(image);
+    }
 
 
-	@GetMapping("/show/{fileName}")
-	public ResponseEntity<byte[]> getImage(@PathVariable String fileName) throws Exception {
-		Image image = getImageByName(fileName);
-		return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
-	}
+    @PostMapping("/uploads")
+    public List<ImageResponse> uploadMultiFiles(@RequestParam("files") MultipartFile[] files) {
+        return Arrays.asList(files).stream().map(file -> uploadSingleFile(file)).collect(Collectors.toList());
+    }
 
 
-	@GetMapping("/show")
-	public ResponseEntity<byte[]> getImageWithRequestParam(@RequestParam(required = false, value = "uuid") String uuid,
-			@RequestParam(required = false, value = "name") String name) throws Exception {
-
-		if (uuid != null) {
-			Image image = getImageByUuid(uuid);
-			return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
-		}
-		if (name != null) {
-			Image image = getImageByName(name);
-			return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
-		}
-		Image defaultImage = Image.defaultImage();
-		return ResponseEntity.ok().contentType(MediaType.valueOf(defaultImage.getFileType()))
-				.body(defaultImage.getData());
-
-	}
+    @GetMapping("/show/{fileName}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String fileName) throws Exception {
+        Image image = getImageByName(fileName);
+        return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
+    }
 
 
-	@GetMapping("/show/{width}/{height}")
-	public ResponseEntity<byte[]> getScaledImageWithRequestParam(@PathVariable int width, @PathVariable int height,
-			@RequestParam(required = false, value = "uuid") String uuid,
-			@RequestParam(required = false, value = "name") String name) throws Exception {
+    @GetMapping("/show")
+    public ResponseEntity<byte[]> getImageWithRequestParam(@RequestParam(required = false, value = "uuid") String uuid,
+                                                           @RequestParam(required = false, value = "name") String name) throws Exception {
 
-		if (uuid != null) {
-			Image image = getImageByUuid(uuid, width, height);
-			return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
-		}
-		if (name != null) {
-			Image image = getImageByName(name, width, height);
-			return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
-		}
-		Image defImage = Image.defaultImage(width, height);
-		return ResponseEntity.ok().contentType(MediaType.valueOf(defImage.getFileType())).body(defImage.getData());
-	}
+        if (uuid != null) {
+            Image image = getImageByUuid(uuid);
+            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
+        }
+        if (name != null) {
+            Image image = getImageByName(name);
+            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
+        }
+        Image defaultImage = Image.defaultImage();
+        return ResponseEntity.ok().contentType(MediaType.valueOf(defaultImage.getFileType()))
+                .body(defaultImage.getData());
+
+    }
+
+    @GetMapping("/show/client/{id}")
+    public ResponseEntity<byte[]> getImageWithRequestParam(@PathVariable Long id) throws Exception {
+        if(id != null) {
+            User user = userService.findById(id);
+            Image image = getImageByUserId(user.getId());
+            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
+        }
+
+
+        Image defaultImage = Image.defaultImage();
+        return ResponseEntity.ok().contentType(MediaType.valueOf(defaultImage.getFileType()))
+                .body(defaultImage.getData());
+
+    }
+
+
+    @GetMapping("/show/{width}/{height}")
+    public ResponseEntity<byte[]> getScaledImageWithRequestParam(@PathVariable int width, @PathVariable int height,
+                                                                 @RequestParam(required = false, value = "uuid") String uuid,
+                                                                 @RequestParam(required = false, value = "name") String name) throws Exception {
+
+        if (uuid != null) {
+            Image image = getImageByUuid(uuid, width, height);
+            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
+        }
+        if (name != null) {
+            Image image = getImageByName(name, width, height);
+            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getFileType())).body(image.getData());
+        }
+        Image defImage = Image.defaultImage(width, height);
+        return ResponseEntity.ok().contentType(MediaType.valueOf(defImage.getFileType())).body(defImage.getData());
+    }
 
 
 //	@GetMapping("/show/{width}/{height}/{fileName:.+}")
@@ -105,45 +120,54 @@ public class ImageController {
 //	}
 
 
-	public Image getImageByName(String name) throws Exception {
-		Image image = imageService.findByFileName(name);
-		if (image == null) {
-			return Image.defaultImage();
-		}
-		return image;
-	}
+    public Image getImageByName(String name) throws Exception {
+        Image image = imageService.findByFileName(name);
+        if (image == null) {
+            return Image.defaultImage();
+        }
+        return image;
+    }
 
 
-	public Image getImageByName(String name, int width, int height) throws Exception {
-		Image image = imageService.findByFileName(name);
-		if (image == null) {
-			Image defImage = Image.defaultImage();
-			defImage.scale(width, height);
-			return defImage;
-		}
-		image.scale(width, height);
-		return image;
-	}
+    public Image getImageByName(String name, int width, int height) throws Exception {
+        Image image = imageService.findByFileName(name);
+        if (image == null) {
+            Image defImage = Image.defaultImage();
+            defImage.scale(width, height);
+            return defImage;
+        }
+        image.scale(width, height);
+        return image;
+    }
 
 
-	public Image getImageByUuid(String uuid) throws Exception {
-		Image image = imageService.findByUuid(uuid);
-		if (image == null) {
-			return Image.defaultImage();
-		}
-		return image;
-	}
+    public Image getImageByUuid(String uuid) throws Exception {
+        Image image = imageService.findByUuid(uuid);
+        if (image == null) {
+            return Image.defaultImage();
+        }
+        return image;
+    }
+
+    public Image getImageByUserId(Long id) throws Exception {
+        Image image = imageService.findByUserId(id);
+        if (image == null) {
+            return Image.defaultImage();
+        }
+        return image;
+    }
 
 
-	public Image getImageByUuid(String uuid, int width, int height) throws Exception {
-		Image image = imageService.findByUuid(uuid);
-		if (image == null) {
-			Image defImage = Image.defaultImage();
-			defImage.scale(width, height);
-			return defImage;
-		}
-		image.scale(width, height);
-		return image;
-	}
+
+    public Image getImageByUuid(String uuid, int width, int height) throws Exception {
+        Image image = imageService.findByUuid(uuid);
+        if (image == null) {
+            Image defImage = Image.defaultImage();
+            defImage.scale(width, height);
+            return defImage;
+        }
+        image.scale(width, height);
+        return image;
+    }
 
 }

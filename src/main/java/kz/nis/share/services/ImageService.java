@@ -44,6 +44,11 @@ public class ImageService {
         return this.imageRepository.findByUuid(uuid);
     }
 
+    public Image findByUserId(Long id) {
+        return this.imageRepository.findByUserId(id);
+    }
+
+
 
     public List<ImageResponse> findAllImageResponse() {
         return this.imageRepository.findAllImageResponse();
