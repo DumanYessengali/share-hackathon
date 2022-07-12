@@ -1,4 +1,4 @@
-package kz.nis.share.dtos;
+package kz.nis.share.dtos.user.profile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

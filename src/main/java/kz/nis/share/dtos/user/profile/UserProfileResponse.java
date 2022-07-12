@@ -1,4 +1,4 @@
-package kz.nis.share.dtos;
+package kz.nis.share.dtos.user.profile;
 
 import kz.nis.share.entities.UserDetail;
 import kz.nis.share.entities.UserEducation;

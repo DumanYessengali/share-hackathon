@@ -55,7 +55,7 @@ create table degree
 
 insert into degree (title) values ('BACHELOR'), ('MASTER'), ('PHD');
 
-create table user_education
+create table user_educations
 (
     id BIGSERIAL not null primary key,
     university_name VARCHAR(255),

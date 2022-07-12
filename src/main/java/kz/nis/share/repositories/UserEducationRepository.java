@@ -1,6 +1,6 @@
 package kz.nis.share.repositories;
 
-import kz.nis.share.dtos.UserProfileEducation;
+import kz.nis.share.dtos.user.profile.UserProfileEducation;
 import kz.nis.share.entities.User;
 import kz.nis.share.entities.UserEducation;
 import org.springframework.data.jpa.repository.JpaRepository;

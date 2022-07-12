@@ -1,11 +1,10 @@
 package kz.nis.share.repositories;
 
 
-import kz.nis.share.dtos.UserProfileInfo;
+import kz.nis.share.dtos.user.profile.UserProfileInfo;
 import kz.nis.share.entities.User;
 import kz.nis.share.entities.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

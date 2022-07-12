@@ -1,10 +1,9 @@
 package kz.nis.share.entities;
 
 import com.sun.istack.NotNull;
-import kz.nis.share.dtos.UserDetailRequest;
+import kz.nis.share.dtos.user.profile.UserDetailRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;

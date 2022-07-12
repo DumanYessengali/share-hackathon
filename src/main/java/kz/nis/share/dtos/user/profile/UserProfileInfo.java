@@ -1,4 +1,4 @@
-package kz.nis.share.dtos;
+package kz.nis.share.dtos.user.profile;
 
 import java.time.LocalDate;
 
