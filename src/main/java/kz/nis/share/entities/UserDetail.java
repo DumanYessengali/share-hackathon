@@ -48,6 +48,7 @@ public class UserDetail {
         this.birthday = userDetailRequest.getBirthday();
         this.subject = userDetailRequest.getSubject();
         this.createdDate = LocalDate.now();
+        this.modifiedAt = LocalDate.now();
         this.user = user;
     }
 

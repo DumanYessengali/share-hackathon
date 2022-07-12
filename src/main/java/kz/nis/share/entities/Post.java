@@ -27,7 +27,6 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @Column(name = "created_at")
     private LocalDate createdAt;
 
