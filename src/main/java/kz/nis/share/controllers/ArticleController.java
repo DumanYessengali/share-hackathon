@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,8 +47,8 @@ public class ArticleController {
 
 
     @PostMapping("/upload")
-    public ArticleResponse uploadSingleFile(@RequestParam("file") MultipartFile file, String title) {
-        User a = userService.findUserByLogin("timka.amanzhol");
+    public ArticleResponse uploadSingleFile(Principal principal, @RequestParam("file") MultipartFile file, String title) {
+        User a = userService.findUserByLogin(principal.getName());
         Article article = Article.buildArticle(file, fileHelper, a, title);
         articleService.save(article);
         return new ArticleResponse(article);
