@@ -30,10 +30,10 @@ public class Post {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<PostComments> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<PostLikes> likes;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
