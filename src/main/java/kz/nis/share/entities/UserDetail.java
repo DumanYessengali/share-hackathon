@@ -31,7 +31,7 @@ public class UserDetail {
     @Column(name = "created_at")
     private LocalDate createdDate;
 
-    @Column(name = "modified_at")
+    @Column(name = "modified_date")
     private LocalDate modifiedAt;
 
     @OneToOne
