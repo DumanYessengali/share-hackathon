@@ -69,7 +69,7 @@ public class ArticleController {
         byte[] bytes = null;
         try {
 
-            file = new File("/home/amanzhol.temirbolat/IdeaProjects/shareFinal/articles/" + article.getFileName());
+            file = new File("articles/" + article.getFileName());
             boolean newFile = file.createNewFile();
 
             OutputStream os = new FileOutputStream(file);
