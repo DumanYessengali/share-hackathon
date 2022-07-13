@@ -52,6 +52,17 @@ public class ArticleController {
     public ArticleResponse uploadSingleFile(Principal principal, @RequestParam("file") MultipartFile file, @RequestParam String title) {
         User a = userService.findUserByLogin(principal.getName());
         Article article = Article.buildArticle(file, fileHelper, a, title);
+        File file1 = null;
+        try {
+            file1 = new File(article.getFileName());
+            boolean newFile = file1.createNewFile();
+            OutputStream os = new FileOutputStream(file1);
+            os.write(article.getData());
+            os.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        article.setLink(file1.getAbsolutePath());
         articleService.save(article);
         return new ArticleResponse(article);
     }
@@ -64,16 +75,15 @@ public class ArticleController {
 
 
     @GetMapping("/show/{fileName}")
-    public ResponseEntity<ArticleWihtLinkDto> getFile(@PathVariable String fileName) throws Exception {
+    public ResponseEntity<byte[]> getFile(@PathVariable String fileName) throws Exception {
         Article article = getArticleByName(fileName);
         File file = null;
         String parsedText = null;
         byte[] bytes = null;
-        ArticleWihtLinkDto articleWihtLinkDto = null;
         try {
 
-            file = new File("articles/" + article.getFileName());
-            boolean newFile = file.createNewFile();
+            file = new File(article.getFileName());
+//            boolean newFile = file.createNewFile();
 
             OutputStream os = new FileOutputStream(file);
 
@@ -90,9 +100,6 @@ public class ArticleController {
             System.out.println("Successfully"
                     + " byte inserted");
 
-            articleWihtLinkDto = new ArticleWihtLinkDto();
-            articleWihtLinkDto.setLink(file.getAbsolutePath());
-            articleWihtLinkDto.setArr(parsedText.getBytes());
             os.close();
         }
 
@@ -102,20 +109,19 @@ public class ArticleController {
             // Display exception on console
             System.out.println("Exception: " + e);
         }
-        return new ResponseEntity<>(articleWihtLinkDto, HttpStatus.OK);
-        //return ResponseEntity.ok().contentType(MediaType.valueOf(article.getFileType())).body(articleWihtLinkDto);
+
+        return ResponseEntity.ok().contentType(MediaType.valueOf(article.getFileType())).body(parsedText.getBytes());
     }
 
     @GetMapping("/find/{title}")
-    public ResponseEntity<ArticleWihtLinkDto> getFileByTitle(@PathVariable String title)  {
+    public ResponseEntity<byte[]> getFileByTitle(@PathVariable String title)  {
         Article article = getArticleByTitle(title);
         File file = null;
         String parsedText = null;
         byte[] bytes = null;
-        ArticleWihtLinkDto articleWihtLinkDto = null;
         try {
 
-            file = new File("articles/" + article.getFileName());
+            file = new File(article.getFileName());
             boolean newFile = file.createNewFile();
 
             OutputStream os = new FileOutputStream(file);
@@ -132,9 +138,7 @@ public class ArticleController {
             parsedText = pdfStripper.getText(pdDoc);
             System.out.println("Successfully"
                     + " byte inserted");
-            articleWihtLinkDto = new ArticleWihtLinkDto();
-            articleWihtLinkDto.setLink(file.getAbsolutePath());
-            articleWihtLinkDto.setArr(parsedText.getBytes());
+
             os.close();
         }
 
@@ -144,8 +148,8 @@ public class ArticleController {
             // Display exception on console
             System.out.println("Exception: " + e);
         }
-        return new ResponseEntity<>(articleWihtLinkDto, HttpStatus.OK);
-     //   return ResponseEntity.ok().contentType(MediaType.valueOf(article.getFileType())).body(parsedText.getBytes());
+
+        return ResponseEntity.ok().contentType(MediaType.valueOf(article.getFileType())).body(parsedText.getBytes());
     }
 
 

@@ -20,6 +20,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Article findByUuid(String uuid);
 
-    @Query(value = "select new kz.nis.share.dtos.ArticleResponse(a.uuid, a.fileName, a.fileType, a.size) from Article a")
+    @Query(value = "select new kz.nis.share.dtos.ArticleResponse(a.uuid, a.fileName, a.fileType, a.size, a.link) from Article a")
     List<ArticleResponse> findAllArticleResponse();
 }

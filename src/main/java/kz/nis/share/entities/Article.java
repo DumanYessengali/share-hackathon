@@ -44,6 +44,9 @@ public class Article {
     @Column(name = "created_date")
     private LocalDate createdDate;
 
+    @Column(name = "link")
+    private String link;
+
     @Lob
     @Column(name = "data")
     @Type(type = "org.hibernate.type.BinaryType")
