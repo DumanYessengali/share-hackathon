@@ -55,4 +55,14 @@ public class PostLikesController {
         }
         return ResponseEntity.ok(response.getBody());
     }
+
+    @GetMapping("/isLiked/{postId}")
+    public ResponseEntity<?> isUserLiked(@PathVariable Long postId, Principal principal) {
+        BodyResponse response = postLikesService.isLiked(principal.getName(), postId);
+        if (response.getStatusCode() != Response.Status.OK) {
+            return ResponseEntity.badRequest().body(response.getMessage());
+        }
+
+        return ResponseEntity.ok(response.getBody());
+    }
 }

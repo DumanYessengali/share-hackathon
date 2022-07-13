@@ -95,4 +95,20 @@ public class PostLikesService {
 
         return new BodyResponse("post liked users", Response.Status.OK, userDtoList);
     }
+
+    public BodyResponse isLiked(String username, Long postId) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isEmpty()) {
+            return new BodyResponse("post does not exist", Response.Status.BAD_REQUEST, null);
+        }
+
+        List<PostLikes> postLikes = postLikesRepository.findAllByPost(post.get());
+
+        for(PostLikes postLike : postLikes) {
+            if (postLike.getUser().getLogin().equals(username)) {
+                return new BodyResponse("post liked", Response.Status.OK, 1);
+            }
+        }
+        return new BodyResponse("not liked", Response.Status.OK, 0);
+    }
 }
