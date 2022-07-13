@@ -122,8 +122,8 @@ public class PostService {
             postCommentsDto.setPostCommentId(postComments.getId());
             UserDto udto = new UserDto();
             udto.setId(postComments.getUser().getId());
-            udto.setName(post.getUser().getName());
-            udto.setSurname(post.getUser().getSurname());
+            udto.setName(postComments.getUser().getName());
+            udto.setSurname(postComments.getUser().getSurname());
             postCommentsDto.setUser(udto);
             postCommentsDtos.add(postCommentsDto);
         }
