@@ -39,8 +39,8 @@ public class ImageController {
 
 
     @PostMapping("/upload")
-    public ImageResponse uploadSingleFile(@RequestParam("file") MultipartFile file) {
-        User a = userService.findUserByLogin("string.string");
+    public ImageResponse uploadSingleFile(@RequestParam("file") MultipartFile file,@RequestParam String login) {
+        User a = userService.findUserByLogin(login);
         Image image = Image.buildImage(file, fileHelper, a);
         imageService.save(image);
         return new ImageResponse(image);
@@ -48,8 +48,8 @@ public class ImageController {
 
 
     @PostMapping("/uploads")
-    public List<ImageResponse> uploadMultiFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files).stream().map(file -> uploadSingleFile(file)).collect(Collectors.toList());
+    public List<ImageResponse> uploadMultiFiles(@RequestParam("files") MultipartFile[] files, @RequestParam String login) {
+        return Arrays.asList(files).stream().map(file -> uploadSingleFile(file, login)).collect(Collectors.toList());
     }
 
 
