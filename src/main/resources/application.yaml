@@ -10,9 +10,9 @@ server:
 spring:
   datasource:
     sslmode: require
-    url: jdbc:postgresql://ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/d41e0911iev5hn
-    username: jmsgzkaoehirqn
-    password: 18afbf8d3ef4dedd4f51753310b3a5360805d80f552ba143b4bad0d481c7477f
+    url: jdbc:postgresql://ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/deug7fqhj7ivna
+    username: ansfxthwyxcuig
+    password: d007adeabf6f2ce50f794f85bd2fcd10539892ec1b5fa8ef48b79779d21918b6
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
@@ -31,13 +31,15 @@ spring:
       max-request-size: 600MB
   flyway:
     sslmode: required
-    url: jdbc:postgresql://ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/d41e0911iev5hn
+    url: jdbc:postgresql://ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/deug7fqhj7ivna
 
-    user: jmsgzkaoehirqn
-    password: 18afbf8d3ef4dedd4f51753310b3a5360805d80f552ba143b4bad0d481c7477f
+    user: ansfxthwyxcuig
+    password: d007adeabf6f2ce50f794f85bd2fcd10539892ec1b5fa8ef48b79779d21918b6
 
     enabled: true
     locations: classpath:db/migration
-
+#  web:
+#    resources:
+#      static-locations: classpath:static
 
 
